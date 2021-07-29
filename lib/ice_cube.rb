@@ -50,6 +50,8 @@ module IceCube
     autoload :YearlyInterval, 'ice_cube/validations/yearly_interval'
     autoload :HourlyInterval, 'ice_cube/validations/hourly_interval'
 
+    autoload :BySetPos, 'ice_cube/validations/by_set_pos'
+
     autoload :HourOfDay, 'ice_cube/validations/hour_of_day'
     autoload :MonthOfYear, 'ice_cube/validations/month_of_year'
     autoload :MinuteOfHour, 'ice_cube/validations/minute_of_hour'

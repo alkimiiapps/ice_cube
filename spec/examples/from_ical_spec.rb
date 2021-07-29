@@ -86,6 +86,11 @@ module IceCube
       expect(rule).to eq(IceCube::Rule.weekly(2, :monday))
     end
 
+    it 'should be able to parse by_set_pos start (BYSETPOS)' do
+      rule = IceCube::Rule.from_ical("FREQ=MONTHLY;BYDAY=MO,WE;BYSETPOS=-1,1")
+      expect(rule).to eq(IceCube::Rule.monthly.day(:monday, :wednesday).by_set_pos([-1, 1]))
+    end
+
     it 'should return no occurrences after daily interval with count is over' do
       schedule = IceCube::Schedule.new(Time.now)
       schedule.add_recurrence_rule(IceCube::Rule.from_ical("FREQ=DAILY;COUNT=5"))
@@ -185,6 +190,16 @@ module IceCube
         expect(sorted_ical(IceCube::Schedule.from_ical(ical).to_ical)).to eq(sorted_ical(ical))
       end
 
+      it 'handles bysetpos' do
+        start_time = Time.now
+
+        schedule = IceCube::Schedule.new(start_time)
+        schedule.add_recurrence_rule(IceCube::Rule.weekly.day(:monday).by_set_pos(1, -1))
+
+        ical = schedule.to_ical
+        expect(sorted_ical(IceCube::Schedule.from_ical(ical).to_ical)).to eq(sorted_ical(ical))
+      end
+
     end
 
     describe 'weekly frequency' do
@@ -237,6 +252,16 @@ module IceCube
         ical = schedule.to_ical
         expect(sorted_ical(IceCube::Schedule.from_ical(ical).to_ical)).to eq(sorted_ical(ical))
       end
+
+      it 'handles bysetpos' do
+        start_time = Time.now
+
+        schedule = IceCube::Schedule.new(start_time)
+        schedule.add_recurrence_rule(IceCube::Rule.weekly.day(:monday).by_set_pos(1, -1))
+
+        ical = schedule.to_ical
+        expect(sorted_ical(IceCube::Schedule.from_ical(ical).to_ical)).to eq(sorted_ical(ical))
+      end
     end
 
     describe 'monthly frequency' do
@@ -275,6 +300,16 @@ module IceCube
 
         schedule = IceCube::Schedule.new(start_time)
         schedule.add_recurrence_rule(IceCube::Rule.monthly(2).day_of_month(1, 15).count(5))
+
+        ical = schedule.to_ical
+        expect(sorted_ical(IceCube::Schedule.from_ical(ical).to_ical)).to eq(sorted_ical(ical))
+      end
+
+      it 'handles bysetpos' do
+        start_time = Time.now
+
+        schedule = IceCube::Schedule.new(start_time)
+        schedule.add_recurrence_rule(IceCube::Rule.monthly.day(:monday).by_set_pos(1, -1))
 
         ical = schedule.to_ical
         expect(sorted_ical(IceCube::Schedule.from_ical(ical).to_ical)).to eq(sorted_ical(ical))
@@ -327,6 +362,16 @@ module IceCube
 
         schedule = IceCube::Schedule.new(start_time)
         schedule.add_recurrence_rule(IceCube::Rule.yearly.count(5))
+
+        ical = schedule.to_ical
+        expect(sorted_ical(IceCube::Schedule.from_ical(ical).to_ical)).to eq(sorted_ical(ical))
+      end
+
+      it 'handles bysetpos' do
+        start_time = Time.now
+
+        schedule = IceCube::Schedule.new(start_time)
+        schedule.add_recurrence_rule(IceCube::Rule.yearly.month_of_year(:february).day(:monday).by_set_pos(1, -1))
 
         ical = schedule.to_ical
         expect(sorted_ical(IceCube::Schedule.from_ical(ical).to_ical)).to eq(sorted_ical(ical))
